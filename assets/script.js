@@ -78,7 +78,7 @@ jQuery(document).ready(function ($) {
                     jQuery("#employee_name").val(response.employee.name);
                     jQuery("#employee_email").val(response.employee.email);
                     jQuery("#employee_designation").val(response.employee.designation);
-                    jQuery("#employee_file").val(response.employee.file);
+                    jQuery("#employee_profile_icon").attr("src", response.employee.profile_image);
     
                     // show form
                     jQuery(".edit_employee_form").removeClass("hide_element");

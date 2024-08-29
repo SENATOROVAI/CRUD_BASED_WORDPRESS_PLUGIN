@@ -148,6 +148,20 @@ class MyEmployees
         $profile_url = '';
         // check for file image
         if (isset($_FILES['profile_image']['name'])) {
+
+            $upload_file = $_FILES['profile_image'];
+
+            // get original filename
+            $original_file_name = pathinfo($upload_file['name'], PATHINFO_FILENAME);
+
+            // get file extension
+            $file_extension = pathinfo($upload_file['name'], PATHINFO_EXTENSION);
+
+            // make unique filename
+            $unique_filename = $original_file_name . '-' . time() . '.' . $file_extension;
+
+            // update value of image
+            $_FILES['profile_image']['name'] = $unique_filename;
             // File available
             $file_uploaded = wp_handle_upload($_FILES['profile_image'], array("test_form" => false));
 
@@ -235,49 +249,91 @@ class MyEmployees
 
     }
     public function handle_edit_employee_data()
-    {
-        // get employee data
-        $employee_id = $_POST['employee_id'];
-        $name = sanitize_text_field($_POST['employee_name']);
-        $email = sanitize_text_field($_POST['employee_email']);
-        $designation = sanitize_text_field($_POST['employee_designation']);
+{
+    // get employee data
+    $employee_id = sanitize_text_field($_POST['employee_id']);
+    $name = sanitize_text_field($_POST['employee_name']);
+    $email = sanitize_text_field($_POST['employee_email']);
+    $designation = sanitize_text_field($_POST['employee_designation']);
 
-        $profile_url = '';
+    $profile_url = '';
 
-        // check for file image
-        if (isset($_FILES['employee_profile_image']['name'])) {
-            // File available
-            $file_uploaded = wp_handle_upload($_FILES['employee_profile_image'], array("test_form" => false));
+    // Get the current profile image URL from the database
+    $current_employee = $this->wpdb->get_row($this->wpdb->prepare("SELECT profile_image FROM $this->table_name WHERE id = %d", $employee_id));
+    $current_profile_image = $current_employee ? $current_employee->profile_image : '';
+
+    // check for file image
+    if (isset($_FILES['employee_profile_image']['name']) && !empty($_FILES['employee_profile_image']['name'])) {
+
+        // get original filename
+        $original_file_name = pathinfo($_FILES['employee_profile_image']['name'], PATHINFO_FILENAME);
+
+        // get file extension
+        $file_extension = pathinfo($_FILES['employee_profile_image']['name'], PATHINFO_EXTENSION);
+
+        // make unique filename
+        $unique_filename = $original_file_name . '-' . time() . '.' . $file_extension;
+
+        // update value of image
+        $_FILES['employee_profile_image']['name'] = $unique_filename; 
+
+        // File available
+        $file_uploaded = wp_handle_upload($_FILES['employee_profile_image'], array("test_form" => false));
+
+        if (!isset($file_uploaded['error'])) {
             $profile_url = $file_uploaded['url'];
-            $this->wpdb->update($this->table_name, [
-                "name" => $name,
-                "email" => $email,
-                "designation" => $designation,
-                "profile_image" => $profile_url
+
+            // Delete the old profile image from the uploads folder
+            if (!empty($current_profile_image)) {
+                // Get the file path from the URL
+                $upload_dir = wp_upload_dir();
+                $old_image_path = str_replace($upload_dir['baseurl'], $upload_dir['basedir'], $current_profile_image);
+
+                if (file_exists($old_image_path)) {
+                    unlink($old_image_path);
+                }
+            }
+
+            $this->wpdb->update(
+                $this->table_name,
+                [
+                    "name" => $name,
+                    "email" => $email,
+                    "designation" => $designation,
+                    "profile_image" => $profile_url
                 ],
                 [
                     "id" => $employee_id
                 ]
             );
-
         } else {
-            $this->wpdb->update($this->table_name, [
+            return wp_send_json([
+                "status" => false,
+                "message" => "Error uploading file: " . $file_uploaded['error']
+            ]);
+        }
+
+    } else {
+        $this->wpdb->update(
+            $this->table_name,
+            [
                 "name" => $name,
                 "email" => $email,
                 "designation" => $designation
-                ],
-                [
-                    "id" => $employee_id
-                ]
-            );
-    
-        }
-        // return wp_send_json
-        return wp_send_json([
-            "status" => true,
-            "message" => "Employee updated successfully"
-        ]);
-        
+            ],
+            [
+                "id" => $employee_id
+            ]
+        );
     }
-       
+
+    // return wp_send_json
+    return wp_send_json([
+        "status" => true,
+        "message" => "Employee updated successfully"
+    ]);
+}
+
+
+
 }

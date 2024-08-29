@@ -74,7 +74,9 @@
 
             <p>
                 <label for="employee_profile_image">Profile Image</label>
-                <input type="file" name="employee_profile_image" id="employee_file">
+                <input type="file" name="employee_profile_image" id="employee_profile_image">
+                <br>
+                <img id="employee_profile_icon" style="height: 80px; width: 80px;" alt="">
             </p>
 
             <p>
