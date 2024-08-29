@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+#wp_employee_crud_plugin {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #0073aa;
+}
+
+/* Form Styles */
+form p {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form select,
+form input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #0073aa;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #005177;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+table td {
+    background-color: #f9f9f9;
+}
+
+table td:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table button {
+    background-color: #0073aa;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+table button:hover {
+    background-color: #005177;
+}
+
+table .btn_edit_employee {
+    margin-right: 5px;
+}
+
+table .btn_delete_employee {
+    background-color: #d9534f;
+}
+
+table .btn_delete_employee:hover {
+    background-color: #c9302c;
+}
+
+/* change error colors for form */
+#frm_add_employee label.error {
+    color: red;
+}
+
+.hide_element {
+    display: none;
+}
+
+#btn_open_add_employee_form {
+    /* float: right; */
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 10px 20px;
+    border: none; 
+    border-radius: 5px;
+    font-size: 16px; 
+    cursor: pointer; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s; 
+}
+
+#btn_open_add_employee_form:hover {
+    background-color: #45a049; 
+    transform: translateY(-2px); 
+}
+
+#btn_open_add_employee_form:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
+}
+
